@@ -10,23 +10,31 @@ import SwiftData
 
 @main
 struct MiningEquipmentTrackerSwiftDataApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+    // Create the model container with your model types
+    var container: ModelContainer = {
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: Equipment.self, Part.self, PartSet.self)
+            return container
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            fatalError("Failed to create ModelContainer: \(error)")
         }
     }()
 
+    // For simple mock login
+    @StateObject var userSession = UserSession()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            // If logged in, show MainTabView, else show LoginView
+            if userSession.isLoggedIn {
+                MainTabView()
+                    .environment(\.modelContext, container.mainContext)
+                    .environmentObject(userSession)
+            } else {
+                LoginView()
+                    .environment(\.modelContext, container.mainContext)
+                    .environmentObject(userSession)
+            }
         }
-        .modelContainer(sharedModelContainer)
     }
 }

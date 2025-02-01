@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8C59DE922D4D1A0800B42142 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 8C59DE912D4D1A0800B42142 /* CodeScanner */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		8C59DE742D4D127200B42142 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C59DE922D4D1A0800B42142 /* CodeScanner in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = MiningEquipmentTrackerSwiftData;
 			packageProductDependencies = (
+				8C59DE912D4D1A0800B42142 /* CodeScanner */,
 			);
 			productName = MiningEquipmentTrackerSwiftData;
 			productReference = 8C59DE612D4D127000B42142 /* MiningEquipmentTrackerSwiftData.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = 8C59DE582D4D127000B42142;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8C59DE902D4D1A0800B42142 /* XCRemoteSwiftPackageReference "CodeScanner" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8C59DE622D4D127000B42142 /* Products */;
 			projectDirPath = "";
@@ -552,6 +561,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8C59DE902D4D1A0800B42142 /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 2.5.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8C59DE912D4D1A0800B42142 /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C59DE902D4D1A0800B42142 /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8C59DE592D4D127000B42142 /* Project object */;
 }
