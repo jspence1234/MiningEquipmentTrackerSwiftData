@@ -1,59 +1,78 @@
-//
-//  EquipmentDetailView.swift
-//  MiningEquipmentTrackerSwiftData
-//
-//  Created by Jacob Spence on 1/31/25.
-//
-
 import SwiftUI
 import SwiftData
 
 struct EquipmentDetailView: View {
-    @Environment(\.modelContext) private var context
-    
-    // Use @Bindable to edit the SwiftData model directly
     @Bindable var equipment: Equipment
+    @Query var parts: [Part]
+    @Environment(\.modelContext) private var context
+
+    var filteredParts: [Part] {
+        parts.filter { $0.equipmentID == equipment.id }
+    }
 
     var body: some View {
         Form {
-            Section {
-                // Binding non-optional properties directly
+            // Equipment details section
+            Section(header: Text("Equipment Details")) {
                 TextField("Equipment #", text: $equipment.equipmentNumber)
-                
-                // For optional properties, provide default binding
-                TextField("Model", text: Binding($equipment.model, default: ""))
-                TextField("Serial Number", text: Binding($equipment.serialNumber, default: ""))
-                TextField("Status", text: Binding($equipment.status, default: ""))
-                TextField("Location", text: Binding($equipment.location, default: ""))
-                
-                // Picker binding remains unchanged as it's an enum (assuming EquipmentType is non-optional)
+
+                // Directly bind to non-optional fields
+                TextField("Model", text: Binding(
+                    get: { equipment.model ?? <#default value#> },
+                    set: { equipment.model = $0 }
+                ))
+
+                TextField("Serial Number", text: Binding(
+                    get: { equipment.serialNumber ?? <#default value#> },
+                    set: { equipment.serialNumber = $0 }
+                ))
+
+                TextField("Status", text: Binding(
+                    get: { equipment.status },
+                    set: { equipment.status = $0 }
+                ))
+
+                TextField("Location", text: Binding(
+                    get: { equipment.location },
+                    set: { equipment.location = $0 }
+                ))
+
+                // Picker for equipment type
                 Picker("Type", selection: $equipment.type) {
-                    ForEach(EquipmentType.allCases, id: \.self) { eqType in
-                        Text(eqType.rawValue).tag(eqType)
+                    ForEach(EquipmentType.allCases, id: \.self) { type in
+                        Text(type.rawValue).tag(type)
                     }
                 }
-            } header: {
-                Text("Equipment Details")
             }
-            
-            Section("Actions") {
+
+            // Parts section
+            Section(header: Text("Parts for \(equipment.equipmentNumber)")) {
+                if filteredParts.isEmpty {
+                    Text("No parts found").foregroundColor(.gray)
+                } else {
+                    List(filteredParts) { part in
+                        Text(part.name).font(.body)
+                    }
+                }
+            }
+
+            // Action section
+            Section {
                 Button(role: .destructive) {
                     context.delete(equipment)
                 } label: {
                     Label("Delete Equipment", systemImage: "trash")
+                        .foregroundColor(.red)
                 }
             }
         }
-        .navigationTitle("Details")
-    }
-}
-
-// Extension for safely handling optional bindings
-extension Binding {
-    init(_ optional: Binding<Value?>, default defaultValue: Value) {
-        self.init(
-            get: { optional.wrappedValue ?? defaultValue },
-            set: { newValue in optional.wrappedValue = newValue }
-        )
+        .navigationTitle("\(equipment.equipmentNumber) Details")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Save") {
+                    try? context.save()
+                }
+            }
+        }
     }
 }

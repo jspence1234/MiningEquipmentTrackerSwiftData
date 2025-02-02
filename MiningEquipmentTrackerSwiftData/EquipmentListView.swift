@@ -5,19 +5,23 @@
 //  Created by Jacob Spence on 1/31/25.
 //
 
-
 import SwiftUI
 import SwiftData
 
 struct EquipmentListView: View {
-    // SwiftData: automatically fetch all Equipment
-    @Query(sort: \Equipment.equipmentNumber, order: .forward)
-    private var equipmentList: [Equipment]
+    // Category to filter equipment
+    let category: String
 
-    // We’ll need the ModelContext to create new items
-    @Environment(\.modelContext) private var context
-
+    // Fetch equipment data
+    @Query var equipment: [Equipment]
+    
+    // Control for showing the add sheet
     @State private var showingAddSheet = false
+
+    // Filtered equipment by category
+    var filteredEquipment: [Equipment] {
+        equipment.filter { $0.type == category }
+    }
 
     var body: some View {
         ZStack {
@@ -27,7 +31,7 @@ struct EquipmentListView: View {
                 List {
                     ForEach(EquipmentType.allCases, id: \.self) { eqType in
                         Section(header: Text(eqType.rawValue).foregroundColor(.white)) {
-                            ForEach(equipmentList.filter { $0.type == eqType }) { equip in
+                            ForEach(filteredEquipment.filter { $0.type == eqType.rawValue }) { equip in
                                 NavigationLink(value: equip) {
                                     VStack(alignment: .leading) {
                                         Text("Equipment #: \(equip.equipmentNumber)")

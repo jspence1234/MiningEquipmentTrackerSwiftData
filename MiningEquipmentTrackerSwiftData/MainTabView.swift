@@ -11,7 +11,7 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         TabView {
-            EquipmentListView()
+            EquipmentListView(category: <#String#>)
                 .tabItem {
                     Image(systemName: "wrench.and.screwdriver")
                     Text("Equipment")

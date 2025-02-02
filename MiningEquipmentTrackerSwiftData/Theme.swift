@@ -21,31 +21,37 @@ struct SpaceGradientBackground: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .blur(radius: 10)    // Slight blur to create a hazy, "cloudy" look
+            .blur(radius: 10)
             .edgesIgnoringSafeArea(.all)
         }
     }
 }
 
-/// A "light glass" button style that keeps the same name
-/// but now uses a frosted, transparent background appearance.
+/// Updated List Text Style
+struct ListTextStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.title2) // Larger font for better readability
+            .foregroundColor(.black) // Improve contrast
+            .padding(.vertical, 4)
+    }
+}
+
+extension View {
+    func listTextStyle() -> some View {
+        self.modifier(ListTextStyle())
+    }
+}
+
+/// Button style for dark, transparent buttons
 struct DarkTransparentButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.headline)
-            .foregroundColor(.black)  // Dark text on a lighter glass background
             .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    // Use white with slight opacity to simulate frosted glass
-                    .fill(Color.white.opacity(configuration.isPressed ? 0.4 : 0.3))
-                    .blur(radius: 2)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.black.opacity(0.15), lineWidth: 1)
-            )
-            .scaleEffect(configuration.isPressed ? 0.96 : 1.0)
-            .shadow(color: Color.black.opacity(0.05), radius: 4, x: 2, y: 2)
+            .frame(maxWidth: .infinity)
+            .background(Color.black.opacity(configuration.isPressed ? 0.4 : 0.6))
+            .foregroundColor(.white)
+            .cornerRadius(8)
+            .padding(.horizontal)
     }
 }

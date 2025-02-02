@@ -1,0 +1,11 @@
+import SwiftUI
+
+extension Binding {
+    /// Initialize a binding for optional values with a default fallback
+    init(_ optional: Binding<Value?>, default defaultValue: Value) {
+        self.init(
+            get: { optional.wrappedValue ?? defaultValue },
+            set: { newValue in optional.wrappedValue = newValue }
+        )
+    }
+}
